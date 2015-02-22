@@ -2,31 +2,31 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-find_git_branch() {
+#find_git_branch() {
   # Based on: http://stackoverflow.com/a/13003854/170413
-  local branch
-  if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
-    if [[ "$branch" == "HEAD" ]]; then
-      branch='detached*'
-    fi
-    git_branch="($branch)"
-  else
-    git_branch="(-)"
-  fi
-}
+#  local branch
+#  if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
+#    if [[ "$branch" == "HEAD" ]]; then
+#      branch='detached*'
+#    fi
+#    git_branch="($branch)"
+#  else
+#    git_branch="(-)"
+#  fi
+#}
 
-find_git_dirty() {
-  local status=$(git status --porcelain 2> /dev/null)
-  if [[ "$status" != "" ]]; then
-    git_dirty='✗'
-    git_color='196m'
-  else
-    git_dirty='✓'
-    git_color='82m'
-  fi
-}
+#find_git_dirty() {
+#  local status=$(git status --porcelain 2> /dev/null)
+#  if [[ "$status" != "" ]]; then
+#    git_dirty='✗'
+#    git_color='196m'
+#  else
+#    git_dirty='✓'
+#    git_color='82m'
+#  fi
+#}
 
-PROMPT_COMMAND="find_git_branch; find_git_dirty; $PROMPT_COMMAND"
+# PROMPT_COMMAND="find_git_branch; find_git_dirty; $PROMPT_COMMAND"
 
 # If not running interactively, don't do anything
 case $- in
@@ -86,7 +86,7 @@ if [ "$color_prompt" = yes ]; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
 #    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-PS1='${debian_chroot:+($debian_chroot)}\[\e[38;5;160m\]\u\[\e[m\] \[\e[38;5;240m\]に\[\e[m\] \[\e[38;5;166m\]\h\[\e[m\] \[\e[38;5;240m\]で\[\e[m\] \[\e[38;5;154m\]\W\[\e[m\] \[\e[38;5;56m\]$git_branch\[\e[m\] \[\e[38;5;$git_color\]$git_dirty\[\e[m\]
+PS1='${debian_chroot:+($debian_chroot)}\[\e[38;5;160m\]\u\[\e[m\] \[\e[38;5;240m\]に\[\e[m\] \[\e[38;5;166m\]\h\[\e[m\] \[\e[38;5;240m\]で\[\e[m\] \[\e[38;5;226m\]\W\[\e[m\]
 \[\e[38;5;43m\]]»\[\e[m\] '
 fi
 unset color_prompt force_color_prompt
@@ -127,9 +127,12 @@ cd_js () {
   NODE_DEV_DIR="/home/samet/Documentos/Web Development/nodeJS/"
   BUBBLES_DIR="$NODE_DEV_DIR""bubbles/"
   BUBBLES_MODULES_DIR="$NODE_DEV_DIR""bubbles-modules/"
-  AENGINE_DIR="$BUBBLES_DIR""www/engine/analytics-engine/"
+  NAE_DIR="$NODE_DEV_DIR""naturae-animus-engine/"
   BOOKS_DIR="$NODE_DEV_DIR""Books/"
   AR_DRONE_DIR="$NODE_DEV_DIR""drones/ar-drone-2.0-dev/"
+  HARDWARE_DIR="$NODE_DEV_DIR""hardware/"
+
+  PUNTA_CANA_DIR="$NODE_DEV_DIR""../punta-cana/excursionesenpuntacana.com/"
 
   PHANTOM_DEV_DIR="/home/samet/Documentos/Web Development/PhantomJS/"
 
@@ -153,7 +156,7 @@ cd_js () {
     "-P"|"--project") case "$2" in
           "bb" | "bubbles") cd "$BUBBLES_DIR"
             ;;
-          "aengine") cd "$AENGINE_DIR"
+          "nae") cd "$NAE_DIR"
             ;;
           "books") cd "$BOOKS_DIR"
             ;;
@@ -166,6 +169,12 @@ cd_js () {
             ;;
           "d"|"drone")
               cd "$AR_DRONE_DIR"
+            ;;
+          "hardware"|"hw")
+              cd "$HARDWARE_DIR""$3"
+            ;;
+          "punta-cana")
+              cd "$PUNTA_CANA_DIR"
             ;;
           *) echo "Specified project <$2> does not exist."
             ;;
@@ -201,6 +210,7 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
@@ -209,3 +219,28 @@ export NVM_DIR="/home/samet/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 export PATH="$HOME/Documentos/node-dev/mongodb/bin:$PATH"
+
+export PATH="/usr/local/go/bin:$PATH"
+
+GIT_PROMPT_ONLY_IN_REPO=1
+GIT_PROMPT_THEME=Solarized
+
+source ~/.bash-git-prompt/gitprompt.sh
+
+# {{{
+# Node Completion - Auto-generated, do not touch.
+shopt -s progcomp
+for f in $(command ls ~/.node-completion); do
+  f="$HOME/.node-completion/$f"
+  test -f "$f" && . "$f"
+done
+# }}}
+
+# LLVM Path
+export PATH="$HOME/Documentos/llvm-dev/llvm/build/Release+Asserts/bin:$PATH"
+
+# Google Depot Tools
+export PATH="$HOME/Documentos/v8-engine-dev/depot_tools:$PATH"
+
+# V8 Engine
+export PATH="$HOME/Documentos/v8-engine-dev/v8/out/x64.release:$PATH"
