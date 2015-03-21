@@ -1,0 +1,23 @@
+# Download the Michael Abrash's "Graphics Programming Black Book"
+
+.PHONY=clean
+
+all: books extras
+
+books:
+	for i in `seq 1 70`; do \
+		wget "http://twimgs.com/ddj/abrashblackbook/gpbb"$$i".pdf"; \
+	done
+
+extras:
+	for i in indx aftr; do \
+		wget "http://twimgs.com/ddj/abrashblackbook/gpbb"$$i".pdf"; \
+	done
+
+clean:
+	for i in `seq 1 70`; do \
+		rm -rfv "./gpbb"$$i".pdf"; \
+	done; \
+	for i in indx aftr; do \
+		rm -rfv "./gpbb"$$i".pdf"; \
+	done
